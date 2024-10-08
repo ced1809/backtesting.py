@@ -1,0 +1,29 @@
+// ... (code existant)
+
+int OnCalculate(const int rates_total,
+               const int prev_calculated,
+               // ...
+               const double &close,
+               // ...
+               const long &spread)
+{
+   // ... (calcul des indicateurs)
+
+   // Calcul du stop loss et take profit en fonction de l'ATR
+   double stopLoss = Close[0] - ATR[0] * ATRMultiplier;
+   double takeProfit = Close[0] + ATR[0] * ATRMultiplier;
+
+   // Conditions d'entrée plus strictes
+   if (RSI[0] > 70 && MACD[0] > Signal[0] && Close[0] > iMA(NULL, 0, 20, 0, MODE_SMA, PRICE_CLOSE, 0, 1)[0])
+   {
+       // Ouvrir une position longue
+       OrderSend(Symbol(), OP_BUY, 0.1, Ask, 3, stopLoss, takeProfit, "My comment");
+   }
+   else if (RSI[0] < 30 && MACD[0] < Signal[0] && Close[0] < iMA(NULL, 0, 20, 0, MODE_SMA, PRICE_CLOSE, 0, 1)[0])
+   {
+       // Ouvrir une position courte
+       OrderSend(Symbol(), OP_SELL, 0.1, Bid, 3, stopLoss, takeProfit, "My comment");
+   }
+
+   return(rates_total);
+}
